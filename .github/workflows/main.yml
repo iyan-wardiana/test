@@ -1,28 +1,20 @@
-name: Deploy to cPanel
-
+name: DEPLOY
 on:
   push:
     branches:
-      - master  # Deploys when changes are pushed to the 'main' branch
+    - master
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Set up SSH
-        uses: webfactory/ssh-agent@v0.5.4
-        with:
-          ssh-private-key: ${{ secrets.DEPLOY_KEY }}
-
-      - name: Deploy files to cPanel server
-        env:
-          CPANEL_HOST: ${{ secrets.DEPLOY_HOST }}
-          CPANEL_PORT: ${{ secrets.DEPLOY_PORT }}
-          CPANEL_USERNAME: ${{ secrets.DEPLOY_USER }}
-          CPANEL_DESTINATION: ${{ secrets.DEPLOY_PATH }}
-        run: |
-          rsync -avz -e "ssh -p $CPANEL_PORT" ./ $CPANEL_USERNAME@$CPANEL_HOST:$CPANEL_DESTINATION
+    - uses: actions/checkout@v3
+    - name: rsync deployments
+      uses: burnett01/rsync-deployments@7.0.1
+      with:
+        switches: -avzr --delete
+        path: /
+        remote_path: /home/prysdbpplus/public_html/test
+        remote_host: pry-sdbpplus.nke.co.id
+        remote_user: prysdbpplus
+        remote_key: ${{ secrets.DEPLOY_KEY }}
