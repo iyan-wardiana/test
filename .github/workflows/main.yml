@@ -13,7 +13,7 @@ jobs:
       uses: burnett01/rsync-deployments@4.1
       with:
         switches: -avzr --delete
-        path: ./
+        path: src/
         remote_path: /home/prysdbpplus/public_html/test
         remote_host: 156.67.218.142
         remote_user: prysdbpplus
