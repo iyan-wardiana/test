@@ -1,16 +1,17 @@
-name: DEPLOY Test
 on:
   push:
-    branches:
-    - master
-
+    branches: [ master ]
+name: 🚀 Deploy website on push
 jobs:
-  deploy:
+  web-deploy:
+    name: 🎉 Auto Deploy
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - name: rsync deployments
-      uses: burnett01/rsync-deployments@7.0.1
+    - name: 🚚 Get latest code
+      uses: actions/checkout@v2.3.2
+
+    - name: 📂 Sync files
+      uses: burnett01/rsync-deployments@4.1
       with:
         switches: -avzr --delete --exclude=".git" --exclude=".github"
         path: /
