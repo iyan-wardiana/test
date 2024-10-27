@@ -1,20 +1,21 @@
-name: DEPLOY
 on:
   push:
-    branches:
-    - master
-
+    branches: [ master ]
+name: 🚀 Deploy website on push
 jobs:
-  deploy:
+  web-deploy:
+    name: 🎉 Auto Deploy
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - name: rsync deployments
-      uses: burnett01/rsync-deployments@5.2.2
+    - name: 🚚 Get latest code
+      uses: actions/checkout@v2.3.2
+
+    - name: 📂 Sync files
+      uses: burnett01/rsync-deployments@4.1
       with:
-        switches: -avzr --delete
-        path: src/
-        remote_path: /home/prysdbpplus/public_html/test/
+        switches: -avzr --delete --exclude=".git" --exclude=".github"
+        path: /
+        remote_path: ${{ secrets.DEPLOY_PATH }}
         remote_host: 156.67.218.142
-        remote_user: prysdbpplus
+        remote_user: ${{ secrets.DEPLOY_USER }}
         remote_key: ${{ secrets.DEPLOY_KEY }}
